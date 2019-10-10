@@ -15,9 +15,9 @@ public class Conta {
     protected int Numero;
     protected double Saldo;
     protected Random gerador = new Random();
-    public Conta(){
-        setNumero(0);
-        setSaldo(0);
+    public Conta(int numero, double saldo){
+        setNumero(numero);
+        setSaldo(saldo);
         
     }
     public int getNumero() {

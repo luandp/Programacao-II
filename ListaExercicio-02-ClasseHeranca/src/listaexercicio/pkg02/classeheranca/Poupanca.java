@@ -13,7 +13,8 @@ public class Poupanca extends Conta{
     
         protected double Variacao;
 
-        public Poupanca(double variacao){
+        public Poupanca(int numero, double saldo, double variacao){
+            super(numero,saldo);
             setVariacao(variacao);
             
     }    
@@ -25,8 +26,8 @@ public class Poupanca extends Conta{
         this.Variacao = Variacao;
     }
 
-    public void RenderJuros(){
-        setSaldo(Saldo);
+    public void RenderJuros(double jurosMensal){
+        this.creditar(this.getSaldo()*jurosMensal);
     }
 
 }
