@@ -10,12 +10,14 @@ package listaexercicio.pkg02.classeheranca;
  * @author Luan Paulo
  */
 public class ContaEspecial extends Conta {
-     /*
-    Atributo limite
-    Sobrescrever o método debitar 
-    */
+   
     private double Limite;
     
+    public ContaEspecial(double limite){
+       
+        setLimite(limite);   
+    }
+    @Override
     public void debitar(double valor){
         if(getLimite()>=valor){
             setLimite(getLimite()-valor);

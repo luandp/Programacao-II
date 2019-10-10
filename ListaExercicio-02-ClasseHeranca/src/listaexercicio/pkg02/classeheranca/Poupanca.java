@@ -10,10 +10,13 @@ package listaexercicio.pkg02.classeheranca;
  * @author Luan Paulo
  */
 public class Poupanca extends Conta{
-    /*Atributo variação
-      Método renderJuros*/
+    
         protected double Variacao;
-        
+
+        public Poupanca(double variacao){
+            setVariacao(variacao);
+            
+    }    
     public double getVariacao() {
         return Variacao;
     }
@@ -23,7 +26,7 @@ public class Poupanca extends Conta{
     }
 
     public void RenderJuros(){
-    
+        setSaldo(Saldo);
     }
 
 }

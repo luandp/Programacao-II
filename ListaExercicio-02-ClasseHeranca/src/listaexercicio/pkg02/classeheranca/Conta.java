@@ -16,7 +16,7 @@ public class Conta {
     protected double Saldo;
     protected Random gerador = new Random();
     public Conta(){
-        setNumero(gerador.nextInt());
+        setNumero(0);
         setSaldo(0);
         
     }
