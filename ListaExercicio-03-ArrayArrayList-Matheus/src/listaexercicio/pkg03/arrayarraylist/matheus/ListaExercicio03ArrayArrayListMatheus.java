@@ -40,7 +40,7 @@ public class ListaExercicio03ArrayArrayListMatheus {
         String Argumentos[] = new String[2];
         Argumentos[0] = "Titulo - Opcao 01";
         Argumentos[1] = "Corpo do Texto - Opcao 01";
-        AppAnuncio.AppAnuncio(Argumentos);
+        AppAnuncio.executar(Argumentos);
         //Opção 02
         /*
         Para usar o args do Main vá até o menu 
@@ -49,7 +49,7 @@ public class ListaExercicio03ArrayArrayListMatheus {
         cada argumento é separado por espaço, se quiser por uma String Inteira
         use aspas Duplas e espaço
         */
-        AppAnuncio.AppAnuncio(args);
+        AppAnuncio.executar(args);
         
         
         
