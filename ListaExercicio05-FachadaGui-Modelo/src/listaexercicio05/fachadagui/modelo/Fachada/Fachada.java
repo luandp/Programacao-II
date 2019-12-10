@@ -7,12 +7,15 @@ package listaexercicio05.fachadagui.modelo.Fachada;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
-import javax.swing.JOptionPane;
 import listaexercicio05.fachadagui.modelo.Classe.Pessoa;
 import listaexercicio05.fachadagui.modelo.Interface.Interface;
 
@@ -23,9 +26,9 @@ import listaexercicio05.fachadagui.modelo.Interface.Interface;
 public class Fachada implements Interface{
            
            ArrayList<Pessoa> pessoas;
-           File f = new File("pessoas.txt");
+           File f = new File("pessoas.dat");
            public Fachada(){
-            pessoas = this.recuperarPessoas(f);
+            pessoas = this.recuperarPessoasSerializable(f);
 
            }
        
@@ -34,7 +37,7 @@ public class Fachada implements Interface{
         try {
          Pessoa p = new Pessoa(nome, telefone, rg);
          pessoas.add(p);
-            adicionarPessoas(pessoas);
+            adicionarPessoasSerializable(pessoas);
          return "Pessoa Adicionada com Sucesso!\nIndice:"+(pessoas.size()-1);
         } catch (Exception e) {
          throw new UnsupportedOperationException("Erro ao Criar esta Pessoa,\nVerifique os dados\ne Tente novamente"); //To change body of generated methods, choose Tools | Templates.
@@ -57,6 +60,22 @@ public class Fachada implements Interface{
         }
        }
 
+    public void adicionarPessoasSerializable(ArrayList<Pessoa> pessoas) {
+         try {
+            if(!f.exists())f.createNewFile();
+            FileOutputStream fos = new FileOutputStream(f);
+	    ObjectOutputStream oos = new ObjectOutputStream(fos);
+	    oos.writeObject(pessoas);
+	    oos.close();
+               
+           	
+        } catch (Exception e) {
+            throw new UnsupportedOperationException("Erro ao Adicionar no Arquivo,\nVerifique os dados\ne tente novamente"); //To change body of generated methods, choose Tools | Templates.
+    
+        }
+       }
+
+    
     @Override
     public ArrayList<Pessoa> recuperarPessoas(File f) {
            ArrayList<Pessoa> ps = new ArrayList<>();
@@ -104,6 +123,20 @@ public class Fachada implements Interface{
         }
     }
 
+    public ArrayList<Pessoa> recuperarPessoasSerializable(File f) {
+           ArrayList<Pessoa> ps = new ArrayList<>();
+        try {
+            if(f.exists()){
+                FileInputStream fis = new FileInputStream(f);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		ps = (ArrayList<Pessoa>) ois.readObject();
+            }
+            return ps;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     @Override
     public String getNomePessoa(int indice) {
         try {
@@ -133,6 +166,7 @@ public class Fachada implements Interface{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.            
         }
     }
+    
     public Pessoa getPessoa(int indice) {
         try {
             return pessoas.get(indice);

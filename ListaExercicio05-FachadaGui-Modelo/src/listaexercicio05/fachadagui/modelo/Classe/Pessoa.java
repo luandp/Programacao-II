@@ -5,11 +5,13 @@
  */
 package listaexercicio05.fachadagui.modelo.Classe;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Luan Paulo
  */
-public class Pessoa {
+public class Pessoa implements Serializable{
     String nome;
     String telefone;
     String rg;
