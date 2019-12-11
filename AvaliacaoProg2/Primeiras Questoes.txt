@@ -1,0 +1,30 @@
+Questão 01
+____________________
+R: N = 3
+
+Questão 02
+____________________
+public boolean equals(Object obj) {
+ Inimigo ini = new Inimigo("", 1, 1);
+ if(obj.equals(ini)){
+     return true;
+ }
+    return false;
+}
+Questão 03
+____________________
+
+Questão 04
+____________________
+
+
+Questão 05
+____________________
+******
+ *****
+  ****
+   ***
+    **
+     *
+Questão 06
+____________________
