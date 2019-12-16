@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -67,9 +68,7 @@ public class Fachada implements Interface{
 	    ObjectOutputStream oos = new ObjectOutputStream(fos);
 	    oos.writeObject(pessoas);
 	    oos.close();
-               
-           	
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new UnsupportedOperationException("Erro ao Adicionar no Arquivo,\nVerifique os dados\ne tente novamente"); //To change body of generated methods, choose Tools | Templates.
     
         }
