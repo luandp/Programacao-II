@@ -5,6 +5,10 @@
  */
 package pkg3va_progii.Views;
 
+import javax.swing.JOptionPane;
+import jdk.nashorn.internal.scripts.JO;
+import pkg3va_progii.Fachada.Fachada;
+
 /**
  *
  * @author Luan Paulo
@@ -14,8 +18,14 @@ public class TelaCheckOut extends javax.swing.JFrame {
     /**
      * Creates new form TelaCheckOut
      */
+    Fachada facade;
     public TelaCheckOut() {
         initComponents();
+    }
+    
+    public TelaCheckOut(Fachada fachada) {
+        initComponents();
+        facade = fachada;
     }
 
     /**
@@ -28,7 +38,7 @@ public class TelaCheckOut extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        numero = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -37,10 +47,15 @@ public class TelaCheckOut extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabel2.setText("Numero do Quarto:");
 
-        jTextField2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        numero.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
 
         jButton1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jButton1.setText("Check-Out");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,7 +70,7 @@ public class TelaCheckOut extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -64,7 +79,7 @@ public class TelaCheckOut extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -73,6 +88,16 @@ public class TelaCheckOut extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            facade.fecharQuarto(Integer.parseInt(numero.getText()));
+            JOptionPane.showMessageDialog(null, "Check-out feito com Sucesso!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Erro no Check-out:"+ e);
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -112,6 +137,6 @@ public class TelaCheckOut extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField numero;
     // End of variables declaration//GEN-END:variables
 }

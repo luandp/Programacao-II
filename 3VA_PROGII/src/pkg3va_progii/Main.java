@@ -5,6 +5,7 @@
  */
 package pkg3va_progii;
 
+import pkg3va_progii.Fachada.Fachada;
 import pkg3va_progii.Views.TelaPrincipal;
 
 /**
@@ -17,7 +18,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       TelaPrincipal tp = new TelaPrincipal();
+       Fachada fachada = new Fachada();
+       TelaPrincipal tp = new TelaPrincipal(fachada);
        tp.show();
     }
     

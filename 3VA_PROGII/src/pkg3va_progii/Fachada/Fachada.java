@@ -5,6 +5,12 @@
  */
 package pkg3va_progii.Fachada;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import pkg3va_progii.Classes.AlugarQuarto;
 import pkg3va_progii.Classes.Quarto;
 import pkg3va_progii.Classes.Cliente;
@@ -19,7 +25,7 @@ public class Fachada {
     ArrayList<Cliente> clientes;
     ArrayList<Quarto> quartos;
     ArrayList<AlugarQuarto> clienteQuarto;
-
+    
     public Fachada(){
         this.clientes = new ArrayList<>();
         this.quartos = new ArrayList<>();
@@ -31,40 +37,17 @@ public class Fachada {
         this.quartos = quartos;
         this.clienteQuarto = clienteQuarto;
     }
-    
+    //Clientes
     public void cadastrarCliente(String nome, int tel, String cpf) throws Exception{
         try {
         Cliente novo = new Cliente(nome, tel, cpf);
         clientes.add(novo);
+            salvarArquivo(clientes, "Clientes.dat");
         } catch (Exception e) {
-           throw new Exception();
+           throw new Exception("Erro ao Cadastrar o Cliente"+e);
         }
     }
-    
-    public void cadastrarQuarto(int numero, int status) throws Exception{
-        try {
-        Quarto novo = new Quarto(numero, status);
-        quartos.add(novo);            
-        } catch (Exception e) {
-        throw new Exception();
-        }
-    }
-    
-    public void alugarQuarto(String nomeCliente, int numeroQuarto) throws Exception{
-        try {
-            Cliente cliente = verificarClienteExiste(nomeCliente);
-            Quarto quarto = verificarQuartoExiste(numeroQuarto);
-            if(quarto.getStatus()==1){
-                throw new Exception();
-            }
-            AlugarQuarto novo = new AlugarQuarto(cliente, quarto);
-            clienteQuarto.add(novo);
-        } catch (Exception e) {
-        throw new Exception();
-        }
-   
-    }
-    
+
     public Cliente verificarClienteExiste(String nomeCliente) throws Exception{
         try {
             for (Cliente next : clientes) {
@@ -77,8 +60,19 @@ public class Fachada {
         throw new Exception();
         }
     }
-    
-    public Quarto verificarQuartoExiste(int numeroQuarto) throws Exception{
+
+    //Quarto
+    public void cadastrarQuarto(int numero, int status) throws Exception{
+        try {
+        Quarto novo = new Quarto(numero, status);
+        quartos.add(novo);            
+            salvarArquivo(quartos, "Quartos.dat");
+        } catch (Exception e) {
+        throw new Exception("Erro ao Cadastrar o Quarto"+e);
+        }
+    }
+   
+     public Quarto verificarQuartoExiste(int numeroQuarto) throws Exception{
         try {
             for (Quarto next : quartos) {
                 if(next.getNumero()== numeroQuarto){
@@ -87,32 +81,72 @@ public class Fachada {
             }
             throw new Exception();
         } catch (Exception e) {
-        throw new Exception();
+        throw new Exception("Quarto não Existe"+e);
         }
     }
     
-    public void fecharQuarto(int numeroQuarto){
+     //Quartos
+    public void alugarQuarto(String nomeCliente, int numeroQuarto) throws Exception{
+        try {
+            Cliente cliente = verificarClienteExiste(nomeCliente);
+            Quarto quarto = verificarQuartoExiste(numeroQuarto);
+            verificarQuartoAlugado(quarto);
+            AlugarQuarto novo = new AlugarQuarto(cliente, quarto);
+            clienteQuarto.add(novo);
+            salvarArquivo(quarto, "ClienteQuarto.dat");
+        } catch (Exception e) {
+        throw new Exception("Erro ao fazer o Check-in: "+e);
+        }
+   
+    }
+    
+    public void fecharQuarto(int numeroQuarto) throws Exception{
         try {
             for (AlugarQuarto next : clienteQuarto) {
-                if(next.getQuarto().getNumero()==numeroQuarto && next.getQuarto().getStatus()==1){
+                if(next.getQuarto().getNumero()== numeroQuarto && next.getQuarto().getStatus()==1){
                     next.getQuarto().setStatus(0);
-                }
-        }
+                    clienteQuarto.remove(next);
+                }       
+            }
         } catch (Exception e) {
+            throw new Exception("Erro ao fazer o Check-Out: "+e);
+        }
+    }
+
+     public void verificarQuartoAlugado(Quarto quarto) throws Exception{
+        try {
+            if(quarto.getStatus()==1){
+                throw new Exception("Quarto alugado!");
+            }
+        } catch (Exception e) {
+        throw new Exception("Quarto não Existe"+e);
         }
     }
     
-    public void salvarArquivo(ArrayList<Object> objeto, String nomedoarquivo) throws Exception{
+    //Arquivo
+    
+    public void salvarArquivo(Object objeto, String nomedoarquivo) throws Exception{
         try {
-            
-        } catch (Exception e) {
-        throw new Exception();
+            File f = new File(nomedoarquivo);
+            if(!f.exists()) f.createNewFile();
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(objeto);
+            oos.close();
+        } catch (IOException e) {
+        throw new Exception("Erro ao Salvar no Arquivo"+e);
         }
     }
     
     public ArrayList<Object> recuperarArquivo(String nomedoarquivo) throws Exception{
         try {
-            
+        ArrayList<Object> o = new ArrayList<>();
+        File f = new File(nomedoarquivo);
+        if(f.exists()){
+            FileInputStream fis = new FileInputStream(f);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            o = (ArrayList<Object>) ois.readObject();
+        }
         } catch (Exception e) {
         throw new Exception();
         }
