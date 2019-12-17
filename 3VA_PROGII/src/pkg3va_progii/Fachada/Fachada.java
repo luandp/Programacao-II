@@ -21,15 +21,15 @@ import java.util.Iterator;
  *
  * @author Luan Paulo
  */
-public class Fachada {
+public final class Fachada {
     ArrayList<Cliente> clientes;
     ArrayList<Quarto> quartos;
     ArrayList<AlugarQuarto> clienteQuarto;
     
-    public Fachada(){
-        this.clientes = new ArrayList<>();
-        this.quartos = new ArrayList<>();
-        this.clienteQuarto = new ArrayList<>();
+    public Fachada() throws Exception{
+        this.clientes = (ArrayList<Cliente>) recuperarArquivo("Clientes.dat");
+        this.quartos = (ArrayList<Quarto>) recuperarArquivo("Quartos.dat");
+        this.clienteQuarto = (ArrayList<AlugarQuarto>) recuperarArquivo("ClienteQuarto.dat");
     }
     
     public Fachada(ArrayList<Cliente> clientes, ArrayList<Quarto> quartos, ArrayList<AlugarQuarto> clienteQuarto) {
@@ -138,17 +138,17 @@ public class Fachada {
         }
     }
     
-    public ArrayList<Object> recuperarArquivo(String nomedoarquivo) throws Exception{
+    public Object recuperarArquivo(String nomedoarquivo) throws Exception{
         try {
-        ArrayList<Object> o = new ArrayList<>();
+        Object o = new Object();
         File f = new File(nomedoarquivo);
         if(f.exists()){
             FileInputStream fis = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            o = (ArrayList<Object>) ois.readObject();
+            o = (Object) ois.readObject();
         }
-        } catch (Exception e) {
-        throw new Exception();
+        } catch (IOException | ClassNotFoundException e) {
+        throw new Exception("Erro ao recuperar arquivo: "+e);
         }
         return null;
     }
