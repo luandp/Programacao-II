@@ -118,20 +118,20 @@ public final class Fachada {
     
     public void fecharQuarto(int numero) throws Exception{
         try {
-            Quarto aux = null;
-            for (Iterator<AlugarQuarto> iterator = clienteQuarto.iterator(); iterator.hasNext();) {
-                AlugarQuarto next = iterator.next();
-                if(next.getQua().getNumero()==numero && next.getQua().getStatus()==1){
-                    clienteQuarto.remove(next);
-                    aux = next.getQua();
+            
+            for (AlugarQuarto cliqua : clienteQuarto) {
+                if(cliqua.getQua().getNumero()==numero && cliqua.getQua().getStatus()==1){
+                    clienteQuarto.remove(cliqua);
+                    break;
                 }
-                for (Iterator<Quarto> iterator1 = quartos.iterator(); iterator1.hasNext();) {
-                    Quarto next1 = iterator1.next();
-                    if(next.equals(aux)){
-                        next1.setStatus(0);
-                    }
+            }
+            for (Quarto quarto : quartos) {
+                if(quarto.getNumero()==numero && quarto.getStatus()==1){
+                    quarto.setStatus(0);
                 }
-                
+            }
+            
+                                          
             File fquartos = new File("Quartos.txt");
             if(!fquartos.exists()) fquartos.createNewFile();
             FileOutputStream fileout = new FileOutputStream(fquartos);
@@ -144,7 +144,7 @@ public final class Fachada {
             ObjectOutputStream objectoutcliqua = new ObjectOutputStream(fileoutcliqua);
             objectoutcliqua.writeObject(clienteQuarto);
                 
-            }
+            
         } catch (Exception e) {
             throw new Exception("Fachada:FecharQuarto:"+e);
         }
