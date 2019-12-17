@@ -111,6 +111,7 @@ public final class Fachada {
             verificarQuartoAlugado(quarto);
             quarto.setStatus(1);
             quartos.get(getIndexQuarto(quarto)).setStatus(1);
+            salvarArquivo(quartos, "Quartos.dat");
             AlugarQuarto novo = new AlugarQuarto(cliente, quarto);
             clienteQuarto.add(novo);
             salvarArquivo(clienteQuarto, "ClienteQuarto.dat");
@@ -137,10 +138,17 @@ public final class Fachada {
             for (AlugarQuarto next : clienteQuarto) {
                 if(next.getQuarto().getNumero()== numeroQuarto && next.getQuarto().getStatus()==1){
                     next.getQuarto().setStatus(0);
-                    quartos.get(getIndexQuarto(next.getQuarto())).setStatus(0);
                     clienteQuarto.remove(next);
+                    salvarArquivo(clienteQuarto, "ClienteQuarto.dat");
                     break;
                 }       
+            }
+            for(Quarto next2 : quartos){
+                if(next2.getNumero()==numeroQuarto && next2.getStatus()==1){
+                next2.setStatus(0);
+                salvarArquivo(quartos, "Quartos.dat");
+                break;
+                }
             }
         } catch (Exception e) {
             throw new Exception("Erro ao fazer o Check-Out: "+e);
