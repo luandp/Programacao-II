@@ -35,14 +35,14 @@ public class Quarto implements Serializable{
     public void setStatus(int status) {
         this.status = status;
     }
-
     @Override
     public String toString() {
         if(this.status==0){
             return "0 - Disponivel";
-        }else{
+        }else if(this.status==1){
             return "1 - Ocupado";    
         }
+        return "";
         
     }
     

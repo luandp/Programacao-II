@@ -110,6 +110,7 @@ public final class Fachada {
             if(quarto==null) throw new Exception("Quarto não pode ser Nulo ou Inexistente!\nVerifique seu Numero ou Cadastre-o!");
             verificarQuartoAlugado(quarto);
             quarto.setStatus(1);
+            quartos.get(getIndexQuarto(quarto)).setStatus(1);
             AlugarQuarto novo = new AlugarQuarto(cliente, quarto);
             clienteQuarto.add(novo);
             salvarArquivo(clienteQuarto, "ClienteQuarto.dat");
@@ -119,11 +120,24 @@ public final class Fachada {
    
     }
     
+    public int getIndexQuarto(Quarto quarto) throws Exception{
+        try {
+            for(Quarto next : quartos){
+                if(next.equals(quarto)){
+                    return quartos.indexOf(next);
+                }
+            }
+            throw  new Exception("Quarto não encontrado!");
+        } catch (Exception e) {
+            throw new Exception("Erro no GetIndexQuarto: "+e);
+        }
+    }
     public void fecharQuarto(int numeroQuarto) throws Exception{
         try {
             for (AlugarQuarto next : clienteQuarto) {
                 if(next.getQuarto().getNumero()== numeroQuarto && next.getQuarto().getStatus()==1){
                     next.getQuarto().setStatus(0);
+                    quartos.get(getIndexQuarto(next.getQuarto())).setStatus(0);
                     clienteQuarto.remove(next);
                     break;
                 }       
