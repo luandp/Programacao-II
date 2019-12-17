@@ -179,7 +179,7 @@ public final class Fachada {
         if(f.exists()){
             FileInputStream fis = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            o = (Object) ois.readObject();
+            o = (ArrayList<AlugarQuarto>) ois.readObject();
             return o;
         }else{
             return null;
