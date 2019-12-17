@@ -7,7 +7,10 @@ package pkg3va_progii.Views;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.print.DocFlavor;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import pkg3va_progii.Classes.Cliente;
 import pkg3va_progii.Fachada.Fachada;
 
 /**
@@ -20,12 +23,22 @@ public class TelaCadastrarCliente extends javax.swing.JFrame {
      * Creates new form TelaCadastrarCliente
      */
     Fachada facade;
+    
+    public void atualizarTabela(){
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new String[]{"Nome", "Telefone", "CPF"});
+        jTable1.setModel(model);
+        for(Cliente cliente :facade.clientes){
+            model.addRow(new String[]{cliente.getNome(),String.valueOf(cliente.getTel()),cliente.getCpf()});
+        }
+    }
     public TelaCadastrarCliente() {
         initComponents();
     }
     public TelaCadastrarCliente(Fachada fachada) {
         initComponents();
         facade = fachada;
+        atualizarTabela();
     }
 
     /**
@@ -146,6 +159,7 @@ public class TelaCadastrarCliente extends javax.swing.JFrame {
         try {
             facade.cadastrarCliente(nome.getText(), Integer.parseInt(telefone.getText()), cpf.getText());
             JOptionPane.showMessageDialog(null, "Cliente Cadastrado com sucesso!");
+            atualizarTabela();
         } catch (Exception ex) {
            JOptionPane.showMessageDialog(null, "Erro ao Cadastrar Cliente:"+ex);
         }

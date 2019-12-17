@@ -6,6 +6,8 @@
 package pkg3va_progii.Views;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import pkg3va_progii.Classes.Quarto;
 import pkg3va_progii.Fachada.Fachada;
 
 /**
@@ -18,13 +20,22 @@ public class TelaCadastrarQuarto extends javax.swing.JFrame {
      * Creates new form TelaCadastrarQuarto
      */
     Fachada facade;
+    public void atualizarTabela(){
+    DefaultTableModel model = new DefaultTableModel();
+    model.setColumnIdentifiers(new String[]{"Numero", "Status"});
+    jTable1.setModel(model);
+    for(Quarto quarto :facade.quartos){
+        model.addRow(new String[]{String.valueOf(quarto.getNumero()),quarto.toString()});
+        }
+    }
     public TelaCadastrarQuarto() {
         initComponents();
     }
 public TelaCadastrarQuarto(Fachada fachada) {
         initComponents();
         facade = fachada;
-    }
+        atualizarTabela();
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -134,6 +145,7 @@ public TelaCadastrarQuarto(Fachada fachada) {
         try {
             facade.cadastrarQuarto(Integer.parseInt(numero.getText()), Integer.parseInt(status.getText()));
             JOptionPane.showMessageDialog(null, "Quarto Cadastrado com Sucesso!");
+            atualizarTabela();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Erro ao Cadastrar Quarto: "+ex);
 

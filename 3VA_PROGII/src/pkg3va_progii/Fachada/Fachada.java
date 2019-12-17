@@ -18,18 +18,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- *
+ * 
  * @author Luan Paulo
  */
 public final class Fachada {
-    ArrayList<Cliente> clientes;
-    ArrayList<Quarto> quartos;
-    ArrayList<AlugarQuarto> clienteQuarto;
+    public ArrayList<Cliente> clientes;
+    public ArrayList<Quarto> quartos;
+    public ArrayList<AlugarQuarto> clienteQuarto;
     
     public Fachada() throws Exception{
         this.clientes = (ArrayList<Cliente>) recuperarArquivo("Clientes.dat");
+        if(clientes==null) clientes = new ArrayList<>();
         this.quartos = (ArrayList<Quarto>) recuperarArquivo("Quartos.dat");
+        if(quartos==null) quartos = new ArrayList<>();
         this.clienteQuarto = (ArrayList<AlugarQuarto>) recuperarArquivo("ClienteQuarto.dat");
+        if(clienteQuarto==null) clienteQuarto = new ArrayList<>();
     }
     
     public Fachada(ArrayList<Cliente> clientes, ArrayList<Quarto> quartos, ArrayList<AlugarQuarto> clienteQuarto) {
@@ -37,14 +40,15 @@ public final class Fachada {
         this.quartos = quartos;
         this.clienteQuarto = clienteQuarto;
     }
+    
     //Clientes
     public void cadastrarCliente(String nome, int tel, String cpf) throws Exception{
         try {
         Cliente novo = new Cliente(nome, tel, cpf);
         clientes.add(novo);
-            salvarArquivo(clientes, "Clientes.dat");
+        salvarArquivo(clientes, "Clientes.dat");
         } catch (Exception e) {
-           throw new Exception("Erro ao Cadastrar o Cliente"+e);
+           throw new Exception("Erro CadastrarCliente(): "+e);
         }
     }
 
@@ -60,7 +64,19 @@ public final class Fachada {
         throw new Exception();
         }
     }
-
+    public Cliente verificarClienteExisteCpf(String cpf) throws Exception{
+        try {
+            for (Cliente next : clientes) {
+                if(next.getCpf().equals(cpf.trim())){
+                    return next;
+                }
+            }
+            throw new Exception();
+        } catch (Exception e) {
+        throw new Exception();
+        }
+    }
+    
     //Quarto
     public void cadastrarQuarto(int numero, int status) throws Exception{
         try {
@@ -89,11 +105,14 @@ public final class Fachada {
     public void alugarQuarto(String nomeCliente, int numeroQuarto) throws Exception{
         try {
             Cliente cliente = verificarClienteExiste(nomeCliente);
+            if(cliente==null) throw new Exception("Cliente não pode ser Nulo ou Inexistente!\nVerifique seu Nome ou Cadastre-o!");
             Quarto quarto = verificarQuartoExiste(numeroQuarto);
+            if(quarto==null) throw new Exception("Quarto não pode ser Nulo ou Inexistente!\nVerifique seu Numero ou Cadastre-o!");
             verificarQuartoAlugado(quarto);
+            quarto.setStatus(1);
             AlugarQuarto novo = new AlugarQuarto(cliente, quarto);
             clienteQuarto.add(novo);
-            salvarArquivo(quarto, "ClienteQuarto.dat");
+            salvarArquivo(clienteQuarto, "ClienteQuarto.dat");
         } catch (Exception e) {
         throw new Exception("Erro ao fazer o Check-in: "+e);
         }
@@ -106,6 +125,7 @@ public final class Fachada {
                 if(next.getQuarto().getNumero()== numeroQuarto && next.getQuarto().getStatus()==1){
                     next.getQuarto().setStatus(0);
                     clienteQuarto.remove(next);
+                    break;
                 }       
             }
         } catch (Exception e) {
@@ -133,8 +153,8 @@ public final class Fachada {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(objeto);
             oos.close();
-        } catch (IOException e) {
-        throw new Exception("Erro ao Salvar no Arquivo"+e);
+        } catch (Exception e) {
+        throw new Exception("Erro SalvarArquivo(): "+e);
         }
     }
     
@@ -146,11 +166,13 @@ public final class Fachada {
             FileInputStream fis = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(fis);
             o = (Object) ois.readObject();
+            return o;
+        }else{
+            return null;
         }
         } catch (IOException | ClassNotFoundException e) {
-        throw new Exception("Erro ao recuperar arquivo: "+e);
+        throw new Exception("Erro ao recuperar arquivo: "+e+" |-> ");
         }
-        return null;
     }
     
 }
